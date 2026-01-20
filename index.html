@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Monety | Sistema</title>
+    <title>Monety | Programa de Indicação</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-        :root {
+      /* --- SEUS ESTILOS ORIGINAIS PRESERVADOS --- */
+      :root {
             --bg-dark: #0f141e;
             --primary-red: #ff4d4d;
             --secondary-orange: #ff9f43; 
@@ -20,45 +21,50 @@
             --glass-border: rgba(255, 255, 255, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-white); min-height: 100vh; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-dark); color: var(--text-white); background-image: radial-gradient(circle at 50% -20%, #2c1010 0%, #0f141e 60%); min-height: 100vh; overflow-x: hidden; }
 
-        /* Estilo para esconder as seções */
-        #secao-login, #secao-rede { display: none; }
+        /* Controle de visibilidade */
+        #tela-login { display: none; padding-top: 100px; text-align: center; }
+        #tela-rede { display: none; padding-bottom: 120px; }
 
-        /* Estilo do Login Simples */
-        .login-container { padding: 40px 20px; text-align: center; display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; height: 100vh; }
-        .login-input { width: 100%; max-width: 300px; padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--card-gray); color: white; }
-        .btn-login { width: 100%; max-width: 300px; padding: 15px; border-radius: 12px; border: none; background: var(--primary-red); color: white; font-weight: bold; cursor: pointer; }
+        /* Estilo do Formulário de Login (combinando com seu tema) */
+        .login-box { margin: 20px; padding: 30px; background: var(--card-gray); border-radius: 25px; border: 1px solid var(--glass-border); }
+        .login-input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: #161b26; color: white; outline: none; }
+        .btn-entrar { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(135deg, #ff4d4d 0%, #b31d1d 100%); color: white; font-weight: 800; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); }
 
-        /* --- SEUS ESTILOS DA REDE --- */
+        /* --- TODOS OS SEUS ESTILOS DA REDE ABAIXO --- */
         .grow-reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
         .grow-reveal.active { opacity: 1; transform: translateY(0); }
         .header-section { padding: 30px 20px 10px 20px; display: flex; align-items: center; gap: 15px; }
-        .referral-main-card { background: linear-gradient(135deg, #ff9f43 0%, #ff6b6b 100%); margin: 20px; padding: 30px 20px; border-radius: 30px; text-align: center; box-shadow: 0 10px 30px rgba(255, 159, 67, 0.3); }
-        .invite-link-box { background: rgba(255, 255, 255, 0.2); padding: 12px; border-radius: 15px; font-size: 0.75rem; color: #fff; overflow: hidden; text-overflow: ellipsis; margin-bottom: 20px; }
+        .referral-main-card { background: linear-gradient(135deg, #ff9f43 0%, #ff6b6b 100%); margin: 20px; padding: 30px 20px; border-radius: 30px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(255, 159, 67, 0.3); }
+        .referral-main-card h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .invite-link-box { background: rgba(255, 255, 255, 0.2); padding: 12px; border-radius: 15px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.3); }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; margin-bottom: 30px; }
         .stat-item { background: var(--card-gray); padding: 20px; border-radius: 25px; text-align: center; border: 1px solid var(--glass-border); }
-        .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); display: flex; padding: 12px 0 25px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .nav-item { text-decoration: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .comm-box { background: var(--card-gray); border-radius: 25px; padding: 20px; margin-bottom: 20px; }
+        .comm-card { background: rgba(255, 255, 255, 0.03); padding: 15px 5px; border-radius: 18px; text-align: center; border: 1px solid var(--glass-border); }
+        .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); display: flex; padding: 12px 0 25px 0; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; flex: 1; gap: 5px;}
         .nav-item.active { color: var(--primary-red); }
+        .user-item { background: var(--card-gray); padding: 15px; border-radius: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); }
     </style>
-</head>
-<body>
+  </head>
+  <body>
 
-    <div id="secao-login">
-        <div class="login-container">
-            <h2>Bem-vindo ao Monety</h2>
-            <p style="color: var(--text-muted)">Faça login para gerenciar sua rede</p>
+    <div id="tela-login" class="animate__animated animate__fadeIn">
+        <h2 style="font-weight: 800; margin-bottom: 10px;">Acesse sua conta</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Monety | Programa de Indicação</p>
+        <div class="login-box">
             <input type="email" id="email" class="login-input" placeholder="Seu e-mail">
             <input type="password" id="password" class="login-input" placeholder="Sua senha">
-            <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+            <button class="btn-entrar" onclick="fazerLogin()">Entrar na Rede</button>
         </div>
     </div>
 
-    <div id="secao-rede">
+    <div id="tela-rede">
         <header class="header-section grow-reveal">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-users" style="font-size: 1.2rem;"></i>
             <div>
                 <h2>Minha Rede</h2>
                 <p>Gerencie sua equipe e lucros</p>
@@ -66,26 +72,39 @@
         </header>
 
         <div class="referral-main-card grow-reveal">
-            <span>Seu Código de Indicação 🎊</span>
+            <span style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 10px;">Seu Código de Indicação 🎊</span>
             <h1 id="ref-code">...</h1>
             <div class="invite-link-box" id="ref-link">Carregando link...</div>
-            <button class="btn-login" style="background: white; color: #ff6b6b;" onclick="copyLink()">Copiar Link</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button onclick="copyLink()" style="background: #fff; color: #ff7e5f; padding: 12px; border-radius: 12px; border:none; font-weight:700;">Copiar Link</button>
+                <button onclick="shareRef()" style="background: #fff; color: #ff7e5f; padding: 12px; border-radius: 12px; border:none; font-weight:700;">Compartilhar</button>
+            </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-item grow-reveal">
-                <i class="fas fa-users" style="color: #4db8ff;"></i>
-                <span class="val" id="total-indicados">0</span>
-                <span class="lab">Rede Total</span>
+                <i class="fas fa-users" style="color: #4db8ff; font-size: 1.5rem; margin-bottom: 15px; display: block;"></i>
+                <span class="val" id="total-indicados" style="font-size: 1.2rem; font-weight: 800; display: block;">0</span>
+                <span class="lab" style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Rede Total</span>
             </div>
             <div class="stat-item grow-reveal">
-                <i class="fas fa-medal" style="color: #00ff88;"></i>
-                <span class="val" id="total-comissao">R$ 0,00</span>
-                <span class="lab">Ganhos</span>
+                <i class="fas fa-medal" style="color: #00ff88; font-size: 1.5rem; margin-bottom: 15px; display: block;"></i>
+                <span class="val" id="total-comissao" style="font-size: 1.2rem; font-weight: 800; display: block;">R$ 0,00</span>
+                <span class="lab" style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Ganhos Rede</span>
+            </div>
+        </div>
+
+        <div style="padding: 0 20px;" class="grow-reveal">
+            <h3 style="margin-bottom: 15px; font-size: 1rem;">Membros da Rede</h3>
+            <div id="indicados-container">
+                <div style="text-align: center; color: var(--text-muted); padding: 20px;">
+                    <i class="fas fa-sync fa-spin"></i> Buscando membros...
+                </div>
             </div>
         </div>
 
         <nav class="nav-bottom">
+            <a class="nav-item" href="/home"><i class="fas fa-home"></i><span>Início</span></a>
             <a class="nav-item active"><i class="fas fa-users"></i><span>Rede</span></a>
             <a class="nav-item" onclick="fazerLogout()"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
         </nav>
@@ -94,7 +113,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBo05t4KVpfwF9biqW6DdthsFJAHjrDroE",
@@ -111,36 +130,33 @@
 
         let userUID = null;
 
-        // Monitor de Estado: Troca a tela sem recarregar
         onAuthStateChanged(auth, async (user) => {
-            const secaoLogin = document.getElementById('secao-login');
-            const secaoRede = document.getElementById('secao-rede');
+            const telaLogin = document.getElementById('tela-login');
+            const telaRede = document.getElementById('tela-rede');
 
             if (user) {
                 userUID = user.uid;
-                secaoLogin.style.display = 'none';
-                secaoRede.style.display = 'block';
+                telaLogin.style.display = 'none';
+                telaRede.style.display = 'block';
                 await loadUserProfile();
                 await fetchRede();
                 triggerGrowReveal();
             } else {
-                secaoLogin.style.display = 'flex';
-                secaoRede.style.display = 'none';
+                telaLogin.style.display = 'block';
+                telaRede.style.display = 'none';
             }
         });
 
-        // Função de Login
         window.fazerLogin = async () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
             } catch (error) {
-                Swal.fire('Erro', 'Login inválido!', 'error');
+                Swal.fire({ icon: 'error', title: 'Erro no Login', text: 'E-mail ou senha incorretos.', background: '#1e2533', color: '#fff' });
             }
         };
 
-        // Função de Sair
         window.fazerLogout = () => signOut(auth);
 
         async function loadUserProfile() {
@@ -151,14 +167,36 @@
                 const code = data.inviteCode || userUID.substring(0, 7).toUpperCase();
                 document.getElementById('ref-code').innerText = code;
                 document.getElementById('ref-link').innerText = `${window.location.origin}/registro.html?ref=${code}`;
-                document.getElementById('total-comissao').innerText = `R$ ${parseFloat(data.totalComissao || 0).toLocaleString('pt-BR')}`;
+                document.getElementById('total-comissao').innerText = `R$ ${parseFloat(data.totalComissao || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             }
         }
 
         async function fetchRede() {
-            const q1 = query(collection(db, "usuarios"), where("indicadoPor", "==", userUID));
-            const snap1 = await getDocs(q1);
-            document.getElementById('total-indicados').innerText = snap1.size;
+            const container = document.getElementById('indicados-container');
+            try {
+                const q = query(collection(db, "usuarios"), where("indicadoPor", "==", userUID));
+                const snap = await getDocs(q);
+                document.getElementById('total-indicados').innerText = snap.size;
+
+                if (snap.empty) {
+                    container.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum membro ainda.</p>';
+                    return;
+                }
+
+                container.innerHTML = snap.docs.map(doc => {
+                    const u = doc.data();
+                    return `
+                        <div class="user-item animate__animated animate__fadeIn">
+                            <div>
+                                <h5 style="font-size:0.9rem;">${u.nome || 'Usuário'}</h5>
+                                <p style="font-size:0.7rem; color:var(--text-muted);">${u.email.split('@')[0]}***</p>
+                            </div>
+                            <div style="background:rgba(255,159,67,0.1); color:#ff9f43; padding:4px 10px; border-radius:8px; font-size:0.65rem; font-weight:800;">NÍVEL 1</div>
+                        </div>`;
+                }).join('');
+            } catch (e) {
+                container.innerHTML = "Erro ao carregar lista.";
+            }
         }
 
         function triggerGrowReveal() {
@@ -170,8 +208,8 @@
         window.copyLink = () => {
             const link = document.getElementById('ref-link').innerText;
             navigator.clipboard.writeText(link);
-            Swal.fire({ toast: true, position: 'top', title: 'Copiado!', showConfirmButton: false, timer: 1500 });
+            Swal.fire({ toast: true, position: 'top', title: 'Link Copiado!', showConfirmButton: false, timer: 1500, background: '#1e2533', color: '#fff' });
         };
     </script>
-</body>
+  </body>
 </html>
