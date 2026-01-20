@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Monety | Programa de Indicação</title>
@@ -9,8 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-      /* --- SEUS ESTILOS ORIGINAIS PRESERVADOS --- */
-      :root {
+        :root {
             --bg-dark: #0f141e;
             --primary-red: #ff4d4d;
             --secondary-orange: #ff9f43; 
@@ -21,99 +20,162 @@
             --glass-border: rgba(255, 255, 255, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-dark); color: var(--text-white); background-image: radial-gradient(circle at 50% -20%, #2c1010 0%, #0f141e 60%); min-height: 100vh; overflow-x: hidden; }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* Controle de visibilidade */
-        #tela-login { display: none; padding-top: 100px; text-align: center; }
-        #tela-rede { display: none; padding-bottom: 120px; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-white);
+            background-image: radial-gradient(circle at 50% -20%, #2c1010 0%, #0f141e 60%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-        /* Estilo do Formulário de Login (combinando com seu tema) */
-        .login-box { margin: 20px; padding: 30px; background: var(--card-gray); border-radius: 25px; border: 1px solid var(--glass-border); }
-        .login-input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: #161b26; color: white; outline: none; }
-        .btn-entrar { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(135deg, #ff4d4d 0%, #b31d1d 100%); color: white; font-weight: 800; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); }
+        /* --- ESTILOS DE AUTENTICAÇÃO --- */
+        #auth-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-        /* --- TODOS OS SEUS ESTILOS DA REDE ABAIXO --- */
-        .grow-reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-        .grow-reveal.active { opacity: 1; transform: translateY(0); }
+        .auth-card {
+            background: var(--card-gray);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .auth-card h2 { text-align: center; margin-bottom: 25px; font-weight: 800; }
+
+        .auth-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #161b26;
+            color: white;
+            outline: none;
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary-red) 0%, #b31d1d 100%);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* --- ESTILOS DA REDE (ORIGINAIS) --- */
+        #app-section { display: none; padding-bottom: 120px; }
+        
         .header-section { padding: 30px 20px 10px 20px; display: flex; align-items: center; gap: 15px; }
-        .referral-main-card { background: linear-gradient(135deg, #ff9f43 0%, #ff6b6b 100%); margin: 20px; padding: 30px 20px; border-radius: 30px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(255, 159, 67, 0.3); }
-        .referral-main-card h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
-        .invite-link-box { background: rgba(255, 255, 255, 0.2); padding: 12px; border-radius: 15px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .referral-main-card { background: linear-gradient(135deg, #ff9f43 0%, #ff6b6b 100%); margin: 20px; padding: 30px 20px; border-radius: 30px; text-align: center; box-shadow: 0 10px 30px rgba(255, 159, 67, 0.3); }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; margin-bottom: 30px; }
         .stat-item { background: var(--card-gray); padding: 20px; border-radius: 25px; text-align: center; border: 1px solid var(--glass-border); }
-        .comm-box { background: var(--card-gray); border-radius: 25px; padding: 20px; margin-bottom: 20px; }
-        .comm-card { background: rgba(255, 255, 255, 0.03); padding: 15px 5px; border-radius: 18px; text-align: center; border: 1px solid var(--glass-border); }
         .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); display: flex; padding: 12px 0 25px 0; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; flex: 1; gap: 5px;}
+        .nav-item { text-decoration: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; flex: 1; gap: 5px; }
         .nav-item.active { color: var(--primary-red); }
+        
+        /* Reutilizando suas classes de animação e lista */
+        .grow-reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+        .grow-reveal.active { opacity: 1; transform: translateY(0); }
         .user-item { background: var(--card-gray); padding: 15px; border-radius: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); }
+        .user-lvl { background: rgba(255, 159, 67, 0.1); color: var(--secondary-orange); font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; }
     </style>
-  </head>
-  <body>
+</head>
+<body>
 
-    <div id="tela-login" class="animate__animated animate__fadeIn">
-        <h2 style="font-weight: 800; margin-bottom: 10px;">Acesse sua conta</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Monety | Programa de Indicação</p>
-        <div class="login-box">
-            <input type="email" id="email" class="login-input" placeholder="Seu e-mail">
-            <input type="password" id="password" class="login-input" placeholder="Sua senha">
-            <button class="btn-entrar" onclick="fazerLogin()">Entrar na Rede</button>
+    <div id="auth-section">
+        <div class="auth-card animate__animated animate__fadeIn">
+            <h2 id="auth-title">Login Monety</h2>
+            
+            <div id="login-fields">
+                <input type="email" id="login-email" class="auth-input" placeholder="Seu e-mail">
+                <input type="password" id="login-pass" class="auth-input" placeholder="Sua senha">
+                <button class="btn-main" onclick="handleLogin()">ENTRAR</button>
+                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
+                    Não tem conta? <a href="javascript:void(0)" onclick="toggleAuth(true)" style="color:var(--primary-red)">Cadastre-se</a>
+                </p>
+            </div>
+
+            <div id="register-fields" style="display:none;">
+                <p id="ref-tag" style="color:var(--secondary-orange); font-size:0.7rem; margin-bottom:10px; text-align:center;"></p>
+                <input type="text" id="reg-nome" class="auth-input" placeholder="Nome Completo">
+                <input type="email" id="reg-email" class="auth-input" placeholder="Melhor e-mail">
+                <input type="password" id="reg-pass" class="auth-input" placeholder="Crie uma senha">
+                <button class="btn-main" onclick="handleRegister()" style="background:linear-gradient(135deg, #ff9f43, #ff6b6b)">CRIAR CONTA</button>
+                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
+                    Já é membro? <a href="javascript:void(0)" onclick="toggleAuth(false)" style="color:var(--primary-red)">Fazer Login</a>
+                </p>
+            </div>
         </div>
     </div>
 
-    <div id="tela-rede">
+    <div id="app-section">
         <header class="header-section grow-reveal">
-            <i class="fas fa-users" style="font-size: 1.2rem;"></i>
+            <i class="fas fa-users" style="font-size: 1.5rem; color: var(--primary-red);"></i>
             <div>
                 <h2>Minha Rede</h2>
                 <p>Gerencie sua equipe e lucros</p>
             </div>
+            <button onclick="logout()" style="margin-left:auto; background:none; border:none; color:var(--text-muted)"><i class="fas fa-sign-out-alt"></i></button>
         </header>
 
         <div class="referral-main-card grow-reveal">
-            <span style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 10px;">Seu Código de Indicação 🎊</span>
+            <span>Seu Código de Indicação 🎊</span>
             <h1 id="ref-code">...</h1>
-            <div class="invite-link-box" id="ref-link">Carregando link...</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <button onclick="copyLink()" style="background: #fff; color: #ff7e5f; padding: 12px; border-radius: 12px; border:none; font-weight:700;">Copiar Link</button>
-                <button onclick="shareRef()" style="background: #fff; color: #ff7e5f; padding: 12px; border-radius: 12px; border:none; font-weight:700;">Compartilhar</button>
+            <div style="background:rgba(255,255,255,0.2); padding:10px; border-radius:10px; font-size:0.7rem; margin-bottom:15px;" id="ref-link">Carregando...</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <button class="btn-main" style="background:#fff; color:#ff6b6b; padding:10px;" onclick="copyLink()">Copiar</button>
+                <button class="btn-main" style="background:#fff; color:#ff6b6b; padding:10px;" onclick="shareRef()">Enviar</button>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-item grow-reveal">
-                <i class="fas fa-users" style="color: #4db8ff; font-size: 1.5rem; margin-bottom: 15px; display: block;"></i>
-                <span class="val" id="total-indicados" style="font-size: 1.2rem; font-weight: 800; display: block;">0</span>
-                <span class="lab" style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Rede Total</span>
+                <i class="fas fa-users" style="color: #4db8ff;"></i>
+                <span class="val" id="total-indicados">0</span>
+                <span class="lab">Rede Total</span>
             </div>
             <div class="stat-item grow-reveal">
-                <i class="fas fa-medal" style="color: #00ff88; font-size: 1.5rem; margin-bottom: 15px; display: block;"></i>
-                <span class="val" id="total-comissao" style="font-size: 1.2rem; font-weight: 800; display: block;">R$ 0,00</span>
-                <span class="lab" style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Ganhos Rede</span>
+                <i class="fas fa-medal" style="color: #00ff88;"></i>
+                <span class="val" id="total-comissao">R$ 0,00</span>
+                <span class="lab">Ganhos</span>
             </div>
         </div>
 
-        <div style="padding: 0 20px;" class="grow-reveal">
-            <h3 style="margin-bottom: 15px; font-size: 1rem;">Membros da Rede</h3>
+        <div style="padding: 0 20px;">
             <div id="indicados-container">
-                <div style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    <i class="fas fa-sync fa-spin"></i> Buscando membros...
-                </div>
+                <p style="text-align:center; color:var(--text-muted);">Carregando membros...</p>
             </div>
         </div>
 
         <nav class="nav-bottom">
-            <a class="nav-item" href="/home"><i class="fas fa-home"></i><span>Início</span></a>
-            <a class="nav-item active"><i class="fas fa-users"></i><span>Rede</span></a>
-            <a class="nav-item" onclick="fazerLogout()"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
+            <a class="nav-item" href="#"><i class="fas fa-home"></i><span>Início</span></a>
+            <a class="nav-item" href="#"><i class="fas fa-gem"></i><span>Planos</span></a>
+            <a class="nav-item active" href="#"><i class="fas fa-users"></i><span>Rede</span></a>
+            <a class="nav-item" href="#"><i class="fas fa-user"></i><span>Perfil</span></a>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBo05t4KVpfwF9biqW6DdthsFJAHjrDroE",
@@ -130,86 +192,124 @@
 
         let userUID = null;
 
+        // --- VERIFICAÇÃO DE ESTADO ---
         onAuthStateChanged(auth, async (user) => {
-            const telaLogin = document.getElementById('tela-login');
-            const telaRede = document.getElementById('tela-rede');
-
             if (user) {
                 userUID = user.uid;
-                telaLogin.style.display = 'none';
-                telaRede.style.display = 'block';
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('app-section').style.display = 'block';
                 await loadUserProfile();
                 await fetchRede();
                 triggerGrowReveal();
             } else {
-                telaLogin.style.display = 'block';
-                telaRede.style.display = 'none';
+                document.getElementById('app-section').style.display = 'none';
+                document.getElementById('auth-section').style.display = 'flex';
+                checkReferralURL();
             }
         });
 
-        window.fazerLogin = async () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch (error) {
-                Swal.fire({ icon: 'error', title: 'Erro no Login', text: 'E-mail ou senha incorretos.', background: '#1e2533', color: '#fff' });
-            }
+        // --- FUNÇÕES DE AUTH ---
+        window.toggleAuth = (isRegister) => {
+            document.getElementById('login-fields').style.display = isRegister ? 'none' : 'block';
+            document.getElementById('register-fields').style.display = isRegister ? 'block' : 'none';
+            document.getElementById('auth-title').innerText = isRegister ? 'Criar Conta' : 'Login Monety';
         };
 
-        window.fazerLogout = () => signOut(auth);
+        function checkReferralURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            if(ref) {
+                toggleAuth(true);
+                document.getElementById('ref-tag').innerText = "Indicado por: " + ref;
+                window.currentRef = ref;
+            }
+        }
 
+        window.handleLogin = async () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) { Swal.fire("Erro", "E-mail ou senha incorretos", "error"); }
+        };
+
+        window.handleRegister = async () => {
+            const nome = document.getElementById('reg-nome').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+            if(!nome || !email || pass.length < 6) return Swal.fire("Atenção", "Preencha tudo corretamente (senha min. 6 carac.)", "warning");
+
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+                await setDoc(doc(db, "usuarios", res.user.uid), {
+                    nome: nome,
+                    email: email,
+                    inviteCode: code,
+                    indicadoPor: window.currentRef || "direto",
+                    totalComissao: 0
+                });
+            } catch (e) { Swal.fire("Erro", e.message, "error"); }
+        };
+
+        window.logout = () => signOut(auth);
+
+        // --- FUNÇÕES DA REDE (REUTILIZADAS) ---
         async function loadUserProfile() {
-            const userRef = doc(db, "usuarios", userUID);
-            const snap = await getDoc(userRef);
+            const snap = await getDoc(doc(db, "usuarios", userUID));
             if (snap.exists()) {
                 const data = snap.data();
-                const code = data.inviteCode || userUID.substring(0, 7).toUpperCase();
-                document.getElementById('ref-code').innerText = code;
-                document.getElementById('ref-link').innerText = `${window.location.origin}/registro.html?ref=${code}`;
+                document.getElementById('ref-code').innerText = data.inviteCode;
+                document.getElementById('ref-link').innerText = `${window.location.origin}${window.location.pathname}?ref=${data.inviteCode}`;
                 document.getElementById('total-comissao').innerText = `R$ ${parseFloat(data.totalComissao || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             }
         }
 
         async function fetchRede() {
             const container = document.getElementById('indicados-container');
-            try {
-                const q = query(collection(db, "usuarios"), where("indicadoPor", "==", userUID));
-                const snap = await getDocs(q);
-                document.getElementById('total-indicados').innerText = snap.size;
-
-                if (snap.empty) {
-                    container.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum membro ainda.</p>';
-                    return;
-                }
-
-                container.innerHTML = snap.docs.map(doc => {
-                    const u = doc.data();
-                    return `
-                        <div class="user-item animate__animated animate__fadeIn">
-                            <div>
-                                <h5 style="font-size:0.9rem;">${u.nome || 'Usuário'}</h5>
-                                <p style="font-size:0.7rem; color:var(--text-muted);">${u.email.split('@')[0]}***</p>
-                            </div>
-                            <div style="background:rgba(255,159,67,0.1); color:#ff9f43; padding:4px 10px; border-radius:8px; font-size:0.65rem; font-weight:800;">NÍVEL 1</div>
-                        </div>`;
-                }).join('');
-            } catch (e) {
-                container.innerHTML = "Erro ao carregar lista.";
-            }
+            const q = query(collection(db, "usuarios"), where("indicadoPor", "==", userUID));
+            const snap = await getDocs(q);
+            let html = '<h4 style="margin-bottom:15px">Membros Diretos</h4>';
+            
+            if(snap.empty) html += '<p style="font-size:0.8rem; color:var(--text-muted)">Nenhum indicado ainda.</p>';
+            
+            snap.forEach(doc => {
+                const u = doc.data();
+                html += `
+                    <div class="user-item">
+                        <div>
+                            <h5>${u.nome}</h5>
+                            <p style="font-size:0.7rem; color:var(--text-muted)">${u.email.split('@')[0]}***</p>
+                        </div>
+                        <div class="user-lvl">NÍVEL 1</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            document.getElementById('total-indicados').innerText = snap.size;
         }
 
         function triggerGrowReveal() {
-            document.querySelectorAll('.grow-reveal').forEach((item, i) => {
-                setTimeout(() => item.classList.add('active'), i * 100);
+            document.querySelectorAll('.grow-reveal').forEach((el, i) => {
+                setTimeout(() => el.classList.add('active'), i * 150);
             });
         }
 
+        // --- UTILITÁRIOS ---
         window.copyLink = () => {
             const link = document.getElementById('ref-link').innerText;
             navigator.clipboard.writeText(link);
-            Swal.fire({ toast: true, position: 'top', title: 'Link Copiado!', showConfirmButton: false, timer: 1500, background: '#1e2533', color: '#fff' });
+            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'Link Copiado!', showConfirmButton: false, timer: 1500 });
+        };
+
+        window.shareRef = () => {
+            const link = document.getElementById('ref-link').innerText;
+            if (navigator.share) {
+                navigator.share({ title: 'Monety', text: 'Ganhe comigo na Monety:', url: link });
+            } else {
+                window.open(`https://api.whatsapp.com/send?text=Ganhe na Monety: ${link}`);
+            }
         };
     </script>
-  </body>
+</body>
 </html>
