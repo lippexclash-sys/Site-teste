@@ -35,10 +35,16 @@
             overflow-x: hidden;
         }
 
-        /* Classes de animação e utilitários que você definiu */
+        /* Lógica de Seções para as Abas funcionarem no mesmo arquivo */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
         .capnex-swal-popup { background: #161b26 !important; border: 1px solid rgba(255, 77, 77, 0.3) !important; border-radius: 24px !important; padding: 20px !important; }
-        .capnex-swal-confirm { background: linear-gradient(135deg, #ff4d4d 0%, #b31d1d 100%) !important; border-radius: 12px !important; padding: 12px 30px !important; font-weight: 700 !important; }
-        
+        .capnex-swal-title { color: #ffffff !important; font-weight: 800 !important; font-size: 1.4rem !important; }
+        .capnex-swal-html { color: #8e94a3 !important; font-size: 0.95rem !important; }
+        .capnex-swal-confirm { background: linear-gradient(135deg, #ff4d4d 0%, #b31d1d 100%) !important; border-radius: 12px !important; padding: 12px 30px !important; font-weight: 700 !important; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3) !important; }
+        .capnex-swal-toast { background: #1e2533 !important; border-left: 4px solid #ff4d4d !important; border-radius: 12px !important; color: #fff !important; }
+
         .grow-reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
         .grow-reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -73,9 +79,8 @@
         .comm-card small { font-size: 0.6rem; color: var(--text-muted); display: block; margin-bottom: 5px; }
         .comm-card strong { font-size: 1.1rem; color: var(--secondary-orange); display: block; }
 
-        .referrals-list-section { padding: 0 20px; }
         .filter-tabs { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-        .tab { padding: 10px 20px; background: var(--card-gray); border-radius: 12px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; border: 1px solid var(--glass-border); cursor: pointer; transition: 0.3s; }
+        .tab { padding: 10px 20px; background: var(--card-gray); border-radius: 12px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; border: 1px solid var(--glass-border); cursor: pointer; }
         .tab.active { background: var(--secondary-orange); color: #fff; border-color: var(--secondary-orange); }
 
         .user-item { background: var(--card-gray); padding: 15px; border-radius: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border); }
@@ -84,105 +89,149 @@
         .user-lvl { background: rgba(255, 159, 67, 0.1); color: var(--secondary-orange); font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; }
 
         .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); display: flex; justify-content: space-around; padding: 12px 0 25px 0; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; transition: 0.3s; }
+        .nav-item { text-decoration: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; transition: 0.3s; cursor: pointer; }
         .nav-item.active { color: var(--primary-red); }
         .nav-item i { font-size: 1.3rem; }
         .nav-item span { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
 
-        /* Estilo da tela de carregamento para evitar a tela preta */
-        #loading-screen { position: fixed; inset: 0; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--primary-red); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        #auth-overlay { position: fixed; inset: 0; background: var(--bg-dark); z-index: 10001; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
+        .auth-card { background: var(--card-gray); padding: 30px; border-radius: 25px; width: 100%; max-width: 350px; border: 1px solid var(--glass-border); text-align: center; }
     </style>
 </head>
 <body>
-
-    <div id="loading-screen">
-        <div class="spinner"></div>
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2 style="margin-bottom:20px; color:white;">Acesse sua Conta</h2>
+            <input type="email" id="login-email" class="auth-input" style="width:100%; padding:15px; margin-bottom:10px; border-radius:12px; background:#161b26; border:1px solid #333; color:white;" placeholder="E-mail">
+            <input type="password" id="login-pass" class="auth-input" style="width:100%; padding:15px; margin-bottom:20px; border-radius:12px; background:#161b26; border:1px solid #333; color:white;" placeholder="Senha">
+            <button onclick="handleLogin()" style="width:100%; padding:15px; border-radius:12px; background:var(--primary-red); color:white; border:none; font-weight:700; cursor:pointer;">ENTRAR</button>
+        </div>
     </div>
 
-    <div id="main-content" style="display: none;">
-        <header class="header-section grow-reveal">
-            <a href="index.html" style="color: var(--text-white); text-decoration: none;"><i class="fas fa-arrow-left"></i></a>
-            <div>
-                <h2>Minha Rede</h2>
-                <p>Gerencie sua equipe e lucros</p>
+    <div id="main-content" style="display:none;">
+        
+        <section id="page-inicio" class="page-section">
+            <header class="header-section grow-reveal">
+                <div><h2>Painel Principal</h2><p>Bem-vindo de volta!</p></div>
+            </header>
+            <div class="referral-main-card grow-reveal" style="background: linear-gradient(135deg, #1e2533 0%, #111 100%); border: 1px solid var(--glass-border);">
+                <span>Saldo Disponível</span>
+                <h1 id="user-saldo-main">R$ 0,00</h1>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button class="btn-ref" style="background:var(--primary-red); color:white;">Sacar</button>
+                    <button class="btn-ref">Depósito</button>
+                </div>
             </div>
-        </header>
+        </section>
 
-        <div class="referral-main-card grow-reveal">
-            <span>Seu Código de Indicação 🎊</span>
-            <h1 id="ref-code">---</h1>
-            <div class="invite-link-box" id="ref-link">Carregando link...</div>
-            <div class="referral-actions">
-                <button class="btn-ref" onclick="copyLink()"><i class="fas fa-copy"></i> Copiar</button>
-                <button class="btn-ref" onclick="shareRef()"><i class="fas fa-share-nodes"></i> Compartilhar</button>
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-item grow-reveal">
-                <i class="fas fa-users" style="color: #4db8ff;"></i>
-                <span class="val" id="total-indicados">0</span>
-                <span class="lab">Rede Total</span>
-            </div>
-            <div class="stat-item grow-reveal">
-                <i class="fas fa-medal" style="color: #00ff88;"></i>
-                <span class="val" id="total-comissao">R$ 0,00</span>
-                <span class="lab">Ganhos de Rede</span>
-            </div>
-        </div>
-
-        <div class="commission-section grow-reveal">
-            <div class="section-title"><i class="fas fa-gift"></i> Regras de Comissão</div>
+        <section id="page-planos" class="page-section">
+            <header class="header-section grow-reveal">
+                <div><h2>Nodes Disponíveis</h2><p>Escolha um plano e maximize seus lucros</p></div>
+            </header>
             
-            <div class="comm-box">
-                <span class="comm-label">🎁 1ª Compra (Ativação)</span>
-                <div class="comm-grid">
-                    <div class="comm-card"><small>Nível 1</small><strong>15%</strong></div>
-                    <div class="comm-card"><small>Nível 2</small><strong>1%</strong></div>
-                    <div class="comm-card"><small>Nível 3</small><strong>1%</strong></div>
+            <div style="padding: 0 20px;">
+                <div class="stat-item grow-reveal" style="background: #1e2533; text-align: left; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="font-weight:800;">Quantum Node N1</h3>
+                        <span style="background:rgba(255,77,77,0.1); color:var(--primary-red); padding:5px 10px; border-radius:8px; font-size:0.7rem;">DISPONÍVEL</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+                        <div><small style="color:var(--text-muted); display:block;">INVESTIMENTO</small><strong>R$ 30,00</strong></div>
+                        <div><small style="color:var(--text-muted); display:block;">LUCRO DIÁRIO</small><strong style="color:#00ff88;">R$ 6,00</strong></div>
+                        <div><small style="color:var(--text-muted); display:block;">RENTABILIDADE</small><strong>20% / dia</strong></div>
+                        <div><small style="color:var(--text-muted); display:block;">CICLO</small><strong>60 dias</strong></div>
+                    </div>
+                    <button style="width:100%; padding:18px; border-radius:15px; background:var(--primary-red); border:none; color:white; font-weight:800; cursor:pointer; box-shadow: 0 5px 15px rgba(255,77,77,0.3);">ATIVAR NODE AGORA</button>
+                </div>
+
+                <div class="stat-item grow-reveal" style="background: #1e2533; text-align: left; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="font-weight:800;">Quantum Node N2</h3>
+                        <span style="background:rgba(255,77,77,0.1); color:var(--primary-red); padding:5px 10px; border-radius:8px; font-size:0.7rem;">DISPONÍVEL</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+                        <div><small style="color:var(--text-muted); display:block;">INVESTIMENTO</small><strong>R$ 50,00</strong></div>
+                        <div><small style="color:var(--text-muted); display:block;">LUCRO DIÁRIO</small><strong style="color:#00ff88;">R$ 10,00</strong></div>
+                    </div>
+                    <button style="width:100%; padding:18px; border-radius:15px; background:var(--primary-red); border:none; color:white; font-weight:800; opacity:0.7;">EM BREVE</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-rede" class="page-section active">
+            <header class="header-section grow-reveal">
+                <i class="fas fa-arrow-left" onclick="switchPage('inicio')"></i>
+                <div><h2>Minha Rede</h2><p>Gerencie sua equipe e lucros</p></div>
+            </header>
+
+            <div class="referral-main-card grow-reveal">
+                <span>Seu Código de Indicação 🎊</span>
+                <h1 id="ref-code">---</h1>
+                <div class="invite-link-box" id="ref-link">Carregando link...</div>
+                <div class="referral-actions">
+                    <button class="btn-ref" onclick="copyLink()"><i class="fas fa-copy"></i> Copiar</button>
+                    <button class="btn-ref" onclick="shareRef()"><i class="fas fa-share-nodes"></i> Compartilhar</button>
                 </div>
             </div>
 
-            <div class="comm-box">
-                <span class="comm-label">🔄 Re-investimentos</span>
-                <div class="comm-grid">
-                    <div class="comm-card"><small>Nível 1</small><strong style="color: #4db8ff;">3%</strong></div>
-                    <div class="comm-card"><small>Nível 2</small><strong style="color: #4db8ff;">1%</strong></div>
-                    <div class="comm-card"><small>Nível 3</small><strong style="color: #4db8ff;">1%</strong></div>
+            <div class="stats-grid">
+                <div class="stat-item grow-reveal">
+                    <i class="fas fa-users" style="color: #4db8ff;"></i>
+                    <span class="val" id="total-indicados">0</span>
+                    <span class="lab">Rede Total</span>
+                </div>
+                <div class="stat-item grow-reveal">
+                    <i class="fas fa-medal" style="color: #00ff88;"></i>
+                    <span class="val" id="total-comissao">R$ 0,00</span>
+                    <span class="lab">Ganhos de Rede</span>
                 </div>
             </div>
-        </div>
 
-        <div class="referrals-list-section grow-reveal">
-            <div class="section-title"><i class="fas fa-list-ul"></i> Membros da Rede</div>
-            
-            <div class="filter-tabs">
-                <div class="tab active" onclick="filterLevel('todos', this)">Todos</div>
-                <div class="tab" onclick="filterLevel(1, this)">Nível 1</div>
-                <div class="tab" onclick="filterLevel(2, this)">Nível 2</div>
-                <div class="tab" onclick="filterLevel(3, this)">Nível 3</div>
+            <div class="commission-section grow-reveal">
+                <div class="section-title"><i class="fas fa-gift"></i> Regras de Comissão</div>
+                <div class="comm-box">
+                    <span class="comm-label">🎁 1ª Compra (Ativação)</span>
+                    <div class="comm-grid">
+                        <div class="comm-card"><small>Nível 1</small><strong>15%</strong></div>
+                        <div class="comm-card"><small>Nível 2</small><strong>1%</strong></div>
+                        <div class="comm-card"><small>Nível 3</small><strong>1%</strong></div>
+                    </div>
+                </div>
+                <div class="comm-box">
+                    <span class="comm-label">🔄 Re-investimentos</span>
+                    <div class="comm-grid">
+                        <div class="comm-card"><small>Nível 1</small><strong style="color: #4db8ff;">3%</strong></div>
+                        <div class="comm-card"><small>Nível 2</small><strong style="color: #4db8ff;">1%</strong></div>
+                        <div class="comm-card"><small>Nível 3</small><strong style="color: #4db8ff;">1%</strong></div>
+                    </div>
+                </div>
             </div>
 
-            <div id="indicados-container">
+            <div class="referrals-list-section grow-reveal" style="padding: 0 20px;">
+                <div class="section-title">Membros da Rede</div>
+                <div class="filter-tabs">
+                    <div class="tab active" onclick="filterRede('todos', this)">Todos</div>
+                    <div class="tab" onclick="filterRede(1, this)">Nível 1</div>
+                    <div class="tab" onclick="filterRede(2, this)">Nível 2</div>
                 </div>
-        </div>
+                <div id="indicados-container"></div>
+            </div>
+        </section>
 
         <nav class="nav-bottom">
-            <a class="nav-item" href="home.html"><i class="fas fa-home"></i><span>Início</span></a>
-            <a class="nav-item" href="planos.html"><i class="fas fa-gem"></i><span>Planos</span></a>
-            <a class="nav-item" href="bonus.html"><i class="fas fa-gift"></i><span>Bônus</span></a>
-            <a class="nav-item active" href="rede.html"><i class="fas fa-users"></i><span>Rede</span></a>
-            <a class="nav-item" href="perfil.html"><i class="fas fa-user"></i><span>Perfil</span></a>
+            <div class="nav-item" onclick="switchPage('inicio', this)"><i class="fas fa-home"></i><span>INÍCIO</span></div>
+            <div class="nav-item" onclick="switchPage('planos', this)"><i class="fas fa-gem"></i><span>PLANOS</span></div>
+            <div class="nav-item" onclick="switchPage('bonus', this)"><i class="fas fa-gift"></i><span>BÔNUS</span></div>
+            <div class="nav-item active" onclick="switchPage('rede', this)"><i class="fas fa-users"></i><span>REDE</span></div>
+            <div class="nav-item" onclick="switchPage('perfil', this)"><i class="fas fa-user"></i><span>PERFIL</span></div>
         </nav>
     </div>
-
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIGURAÇÃO DO SEU FIREBASE (MANTIDA DO ORIGINAL)
         const firebaseConfig = {
             apiKey: "AIzaSyBo05t4KVpfwF9biqW6DdthsFJAHjrDroE",
             authDomain: "monety-site-2.firebaseapp.com",
@@ -199,55 +248,111 @@
         let userUID = null;
         let redeData = [];
 
+        // --- CONTROLE DE NAVEGAÇÃO (ABAS) ---
+        window.switchPage = (pageId, element) => {
+            // Esconde todas as seções
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostra a seção desejada
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+
+            // Atualiza o estado visual do menu inferior
+            if (element) {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+
+            // Ativa animações de entrada
+            triggerGrowReveal();
+        };
+
+        // --- AUTENTICAÇÃO (CORREÇÃO DA TELA PRETA) ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userUID = user.uid;
-                // Esconde o carregamento e mostra o conteúdo
-                document.getElementById('loading-screen').style.display = 'none';
+                // Esconde login e mostra o app
+                document.getElementById('auth-overlay').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 
                 await loadUserProfile();
                 await fetchRede();
                 triggerGrowReveal();
             } else {
-                // Se não tiver logado, manda pro login (mude para o nome do seu arquivo de login)
-                window.location.href = "login.html"; 
+                // Mostra tela de login se não houver usuário
+                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('auth-overlay').style.display = 'flex';
             }
         });
 
-        async function loadUserProfile() {
-            const userRef = doc(db, "usuarios", userUID);
-            const snap = await getDoc(userRef);
-            if (snap.exists()) {
-                const data = snap.data();
-                document.getElementById('ref-code').innerText = data.inviteCode || "S/C";
-                document.getElementById('ref-link').innerText = window.location.origin + "/registro.html?ref=" + data.inviteCode;
-                document.getElementById('total-comissao').innerText = `R$ ${parseFloat(data.totalComissao || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        window.handleLogin = () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            if(!email || !pass) {
+                Swal.fire({ icon: 'error', title: 'Oops...', text: 'Preencha todos os campos!' });
+                return;
             }
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .catch(error => {
+                    Swal.fire({ icon: 'error', title: 'Falha no Login', text: 'E-mail ou senha incorretos.' });
+                });
+        };
+
+        // --- CARREGAMENTO DE DADOS ---
+        async function loadUserProfile() {
+            try {
+                const userRef = doc(db, "usuarios", userUID);
+                const snap = await getDoc(userRef);
+                
+                if (snap.exists()) {
+                    const data = snap.data();
+                    // Preenche Código e Link
+                    const code = data.inviteCode || "S/C";
+                    document.getElementById('ref-code').innerText = code;
+                    document.getElementById('ref-link').innerText = `https://monety.site/registro?ref=${code}`;
+                    
+                    // Preenche Ganhos e Saldo
+                    const comissao = parseFloat(data.totalComissao || 0);
+                    document.getElementById('total-comissao').innerText = `R$ ${comissao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    
+                    if(document.getElementById('user-saldo-main')) {
+                        document.getElementById('user-saldo-main').innerText = `R$ ${comissao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    }
+                }
+            } catch (e) { console.error("Erro ao carregar perfil:", e); }
         }
 
         async function fetchRede() {
-            const container = document.getElementById('indicados-container');
-            const q = query(collection(db, "usuarios"), where("indicadoPor", "==", userUID));
-            const snap = await getDocs(q);
-            
-            redeData = [];
-            snap.forEach(doc => {
-                redeData.push({...doc.data(), nivel: 1});
-            });
+            try {
+                const q = query(collection(db, "usuarios"), where("indicadoPor", "==", userUID));
+                const snap = await getDocs(q);
+                
+                redeData = [];
+                snap.forEach(doc => {
+                    redeData.push({ ...doc.data(), nivel: 1 });
+                });
 
-            document.getElementById('total-indicados').innerText = redeData.length;
-            renderList(redeData);
+                document.getElementById('total-indicados').innerText = redeData.length;
+                renderRedeList(redeData);
+            } catch (e) { console.error("Erro ao carregar rede:", e); }
         }
 
-        window.renderList = (data) => {
+        window.renderRedeList = (data) => {
             const container = document.getElementById('indicados-container');
             if (data.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum membro encontrado.</p>';
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">Nenhum indicado encontrado.</p>';
                 return;
             }
+
             container.innerHTML = data.map(u => `
-                <div class="user-item animate__animated animate__fadeIn">
+                <div class="user-item animate__animated animate__fadeInUp">
                     <div class="user-info">
                         <h5>${u.nome || 'Usuário'}</h5>
                         <p>${u.email}</p>
@@ -257,42 +362,46 @@
             `).join('');
         };
 
-        window.filterLevel = (lvl, el) => {
+        window.filterRede = (lvl, el) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
+            
             if (lvl === 'todos') {
-                renderList(redeData);
+                renderRedeList(redeData);
             } else {
-                renderList(redeData.filter(u => u.nivel === lvl));
+                renderRedeList(redeData.filter(u => u.nivel === lvl));
             }
         };
 
+        // --- UTILITÁRIOS ---
         function triggerGrowReveal() {
-            document.querySelectorAll('.grow-reveal').forEach((item, index) => {
-                setTimeout(() => item.classList.add('active'), index * 100);
+            const elements = document.querySelectorAll('.grow-reveal');
+            elements.forEach((el, idx) => {
+                setTimeout(() => el.classList.add('active'), idx * 80);
             });
         }
 
         window.copyLink = () => {
             const link = document.getElementById('ref-link').innerText;
-            navigator.clipboard.writeText(link);
-            Swal.fire({
-                toast: true,
-                position: 'top',
-                icon: 'success',
-                title: 'Link copiado!',
-                showConfirmButton: false,
-                timer: 1500,
-                customClass: { popup: 'capnex-swal-toast' }
+            navigator.clipboard.writeText(link).then(() => {
+                Swal.fire({
+                    toast: true,
+                    position: 'top',
+                    icon: 'success',
+                    title: 'Link copiado!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    customClass: { popup: 'capnex-swal-toast' }
+                });
             });
         };
 
         window.shareRef = () => {
             const link = document.getElementById('ref-link').innerText;
             if (navigator.share) {
-                navigator.share({ title: 'Monety', text: 'Venha lucrar na Monety!', url: link });
+                navigator.share({ title: 'Monety', text: 'Ganhe com a Monety!', url: link });
             } else {
-                window.open(`https://api.whatsapp.com/send?text=Venha lucrar na Monety! ${link}`);
+                window.open(`https://api.whatsapp.com/send?text=Ganhe com a Monety! ${link}`);
             }
         };
     </script>
