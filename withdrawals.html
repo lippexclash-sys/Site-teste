@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin – Saques</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body onload="checkAuth(); loadWithdrawals()">
+
+<div class="admin-container">
+  <aside class="sidebar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="users.html">Usuários</a>
+    <a href="withdrawals.html" class="active">Saques</a>
+    <button onclick="logout()">Sair</button>
+  </aside>
+
+  <main class="main-content">
+    <h1>Saques Pendentes</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="withdrawalsTable">
+        <tr><td colspan="4">Carregando...</td></tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js" defer></script>
+<script src="admin.js" defer></script>
+
+</body>
+</html>
